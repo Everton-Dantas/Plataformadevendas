@@ -1,14 +1,12 @@
 package br.com.plataformavendas.plataformavendas;
 
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-public class inscricao {
+public class Inscricao {
     private Integer id;
     private String nome;
     private String email;
