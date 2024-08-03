@@ -1,20 +1,19 @@
 package br.com.plataformavendas.plataformavendas;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/eventos")
 public class EventoController {
 
-    @Autowired
-    private EventoService eventoService;
+    private final EventoService eventoService;
 
     @GetMapping
     public ResponseEntity<Collection<Evento>> findAll() {
@@ -23,21 +22,22 @@ public class EventoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Evento>> findById(@PathVariable UUID id) {
-        var evento = eventoService.findById(id);
-        return ResponseEntity.ok(evento);
+    public ResponseEntity<Evento> findById(@PathVariable UUID id) {
+        return eventoService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResourceNotFoundException("Evento não encontrado com ID: " + id));
     }
 
     @PostMapping
-    public ResponseEntity<Evento> save(@RequestBody Evento evento) {
-        evento = eventoService.save(evento);
-        return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(evento);
+    public ResponseEntity<Evento> save(@Valid @RequestBody Evento evento) {
+        var savedEvento = eventoService.save(evento);
+        return ResponseEntity.status(201).body(savedEvento);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Evento> update(@PathVariable UUID id, @RequestBody Evento evento) {
-        evento = eventoService.update(id, evento);
-        return ResponseEntity.ok(evento);
+    public ResponseEntity<Evento> update(@PathVariable UUID id, @Valid @RequestBody Evento evento) {
+        var updatedEvento = eventoService.update(id, evento);
+        return ResponseEntity.ok(updatedEvento);
     }
 
     @DeleteMapping("/{id}")

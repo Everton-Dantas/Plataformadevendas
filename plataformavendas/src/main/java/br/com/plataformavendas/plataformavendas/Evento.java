@@ -1,11 +1,13 @@
 package br.com.plataformavendas.plataformavendas;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -15,6 +17,7 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Evento {
 
     @Id
@@ -27,19 +30,14 @@ public class Evento {
     private String descricao;
 
     @NotNull(message = "Data de início do evento é obrigatória")
-    private LocalDateTime dataInicio;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dataInicio;
 
     @NotNull(message = "Data de término do evento é obrigatória")
-    private LocalDateTime dataTermino;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dataTermino;
 
     @NotNull(message = "Preço do evento é obrigatório")
+    @Positive(message = "O preço deve ser maior que 0.0")
     private double preco;
-
-    public Evento(String nome, String descricao,LocalDateTime dataInicio, LocalDateTime dataTermino, double preco) {
-        this.nome = nome;
-        this.descricao = descricao;
-        this.dataInicio = dataInicio;
-        this.dataTermino = dataTermino;
-        this.preco = preco;
-    }
 }

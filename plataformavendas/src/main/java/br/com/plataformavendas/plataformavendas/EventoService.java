@@ -1,6 +1,7 @@
 package br.com.plataformavendas.plataformavendas;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.hibernate.ResourceClosedException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -8,10 +9,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class EventoService {
 
-    @Autowired
-    private EventoRepository eventoRepository;
+    private final EventoRepository eventoRepository;
 
     public Collection<Evento> findAll() {
         return eventoRepository.findAll();
@@ -22,23 +23,24 @@ public class EventoService {
     }
 
     public Evento save(Evento evento) {
-        evento = eventoRepository.save(evento);
-        return evento;
+        return eventoRepository.save(evento);
     }
 
     public Evento update(UUID id, Evento evento) {
-        Evento buscaEvento = eventoRepository.getOne(id);
-        buscaEvento.setNome(evento.getNome());
-        buscaEvento.setDescricao(evento.getDescricao());
-        buscaEvento.setDataInicio(evento.getDataInicio());
-        buscaEvento.setDataTermino(evento.getDataTermino());
-        buscaEvento.setPreco(evento.getPreco());
-        buscaEvento = eventoRepository.save(buscaEvento);
-
-        return buscaEvento;
+        return eventoRepository.findById(id).map(existingEvento -> {
+            existingEvento.setNome(evento.getNome());
+            existingEvento.setDescricao(evento.getDescricao());
+            existingEvento.setDataInicio(evento.getDataInicio());
+            existingEvento.setDataTermino(evento.getDataTermino());
+            existingEvento.setPreco(evento.getPreco());
+            return eventoRepository.save(existingEvento);
+        }).orElseThrow(() -> new ResourceNotFoundException("Evento não encontrado com ID: " + id));
     }
 
     public void delete(UUID id) {
+        if(!eventoRepository.existsById(id)) {
+            throw new ResourceClosedException("Evento não encontrado com ID: " + id);
+        }
         eventoRepository.deleteById(id);
     }
 
