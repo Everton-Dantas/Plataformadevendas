@@ -1,5 +1,8 @@
-package br.com.plataformavendas.plataformavendas;
+package br.com.plataformavendas.plataformavendas.controller;
 
+import br.com.plataformavendas.plataformavendas.model.Evento;
+import br.com.plataformavendas.plataformavendas.service.EventoService;
+import br.com.plataformavendas.plataformavendas.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

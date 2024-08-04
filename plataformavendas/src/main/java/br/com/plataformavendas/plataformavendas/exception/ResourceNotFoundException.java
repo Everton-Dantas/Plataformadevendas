@@ -1,4 +1,4 @@
-package br.com.plataformavendas.plataformavendas;
+package br.com.plataformavendas.plataformavendas.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

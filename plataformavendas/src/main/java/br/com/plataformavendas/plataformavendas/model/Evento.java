@@ -1,4 +1,4 @@
-package br.com.plataformavendas.plataformavendas;
+package br.com.plataformavendas.plataformavendas.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

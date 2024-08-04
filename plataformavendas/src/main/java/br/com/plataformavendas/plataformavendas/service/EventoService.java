@@ -1,5 +1,8 @@
-package br.com.plataformavendas.plataformavendas;
+package br.com.plataformavendas.plataformavendas.service;
 
+import br.com.plataformavendas.plataformavendas.model.Evento;
+import br.com.plataformavendas.plataformavendas.exception.ResourceNotFoundException;
+import br.com.plataformavendas.plataformavendas.repository.EventoRepository;
 import lombok.AllArgsConstructor;
 import org.hibernate.ResourceClosedException;
 import org.springframework.stereotype.Service;

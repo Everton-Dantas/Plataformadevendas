@@ -1,11 +1,14 @@
-package br.com.plataformavendas.plataformavendas;
+package br.com.plataformavendas.plataformavendas.config;
 
+import br.com.plataformavendas.plataformavendas.exception.InvalidPaymentException;
+import br.com.plataformavendas.plataformavendas.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +30,11 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(InvalidPaymentException.class)
+    public ResponseEntity<?> invalidPaymentExceptionHandler(InvalidPaymentException ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
